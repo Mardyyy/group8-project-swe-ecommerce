@@ -1,0 +1,53 @@
+<!-- templates/admin/view_order.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Order Details for Order #{{ order.id }}</h2>
+
+  <p><strong>Customer:</strong> {{ order.user.username }}</p>
+  <p><strong>Order Date:</strong> 
+    {% if order.order_date %}
+        {{ order.order_date.strftime('%Y-%m-%d') }}
+    {% else %}
+        N/A
+    {% endif %}
+</p>
+  <p><strong>Status:</strong> {{ order.status }}</p>
+
+  <h3>Ordered Items:</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order_items %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.product.price }}</td>
+        <td>${{ item.product.price * item.quantity }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h4>Total Order Amount: ${{ total_price }}</h4>
+
+  <!-- Form to update the order status -->
+  <form method="POST" action="{{ url_for('admin.update_order_status', id=order.id) }}">
+    <label for="status">Update Status:</label>
+    <select name="status" id="status" class="form-control">
+      <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+      <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+      <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+    </select>
+    <button type="submit" class="btn btn-primary mt-2">Update Status</button>
+  </form>
+</div>
+{% endblock %}

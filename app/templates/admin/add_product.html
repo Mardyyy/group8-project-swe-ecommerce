@@ -1,0 +1,51 @@
+<!-- app/templates/admin/add_product.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1>Add a New Product</h1>
+  
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      {{ form.name(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      {{ form.description(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      {{ form.price(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      {{ form.quantity(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      <label for="image_url">Image URL</label>
+      {{ form.image_url(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+    </div>
+  </form>
+
+  <br>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="flash {{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+{% endblock %}

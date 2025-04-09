@@ -1,0 +1,35 @@
+<!-- app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shop</title>
+    <!-- You can link your CSS here or add inline styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar (you can customize it as needed) -->
+    <nav>
+        <a href="{{ url_for('home.homepage') }}">Home</a>
+        <a href="{{ url_for('products.index') }}">Products</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Login</a>
+        {% endif %}
+    </nav>
+
+    <!-- Main content -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer (you can add any footer content here) -->
+    <footer>
+        <p>© 2025 Online Shop</p>
+    </footer>
+</body>
+</html>

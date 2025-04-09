@@ -1,0 +1,54 @@
+<!-- templates/admin/manage_orders.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Order History</h2>
+
+  <!-- Sorting options (URLs will pass the sort_by argument to the route) -->
+  <div class="mb-3">
+    <a href="{{ url_for('admin.manage_orders', sort_by='date') }}" class="btn btn-sm btn-secondary">Sort by Date</a>
+    <a href="{{ url_for('admin.manage_orders', sort_by='customer') }}" class="btn btn-sm btn-secondary">Sort by Customer</a>
+    <a href="{{ url_for('admin.manage_orders', sort_by='amount') }}" class="btn btn-sm btn-secondary">Sort by Amount</a>
+  </div>
+  
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Date</th>
+        <th>Discount</th>
+        <th>Total</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+        {% if orders %}
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user.username }}</td>
+        <td>{% if order.timestamp %}
+            {{ order.timestamp.strftime('%Y-%m-%d') }}
+          {% else %}
+            N/A
+          {% endif %}</td>
+        <td>${{ "%.2f"|format(order.discount_amount or 0) }}</td>
+        <td>${{ "%.2f"|format(order.total_amount) }}</td>
+        <td>
+            <a href="{{ url_for('admin.view_order', id=order.id) }}">View Order</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% else %}
+    </tbody>
+    
+    <tr>
+        <td colspan="5">No orders placed yet.</td>
+    </tr>
+    {% endif %}
+  </table>
+</div>
+{% endblock %}

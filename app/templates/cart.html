@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Cart</h2>
+    {% if cart_items %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.product.price) }}</td>
+                    <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+                    <td>
+                        <a href="{{ url_for('cart.remove_item', item_id=item.id) }}" class="btn btn-sm btn-danger">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form action="{{ url_for('cart.view_cart') }}" method="get">
+            <div class="form-group">
+              <label for="discount">Discount Code</label>
+              <input type="text" class="form-control" id="discount" name="discount" value="{{ code }}">
+              <button type="submit" class="btn btn-outline-secondary mt-2">Apply</button>
+            </div>
+          </form>
+          <!-- <form action="{{ url_for('cart.place_order') }}" method="POST">
+            <div class="form-group">
+                <label for="discount_code">Discount Code</label>
+                <input type="text" class="form-control" id="discount_code" name="discount_code" value="{{ code }}">
+                <button type="submit" class="btn btn-outline-secondary mt-2">Apply</button>
+            </div>
+        </form> -->
+        
+        <!-- <form action="{{ url_for('cart.view_cart') }}" method="get">
+            <div class="form-group">
+                <label for="discount">Discount Code</label>
+                <input type="text" class="form-control" id="discount" name="discount" value="{{ code }}">
+                <button type="submit" class="btn btn-outline-secondary mt-2">Apply</button>
+            </div>
+        </form> -->
+        
+          {% if discount == 0 %}
+          <div class="alert alert-warning mt-3" role="alert">
+            No discount code applied or the code is invalid.
+          </div>
+        {% endif %}
+
+        <h4>Subtotal: ${{ "%.2f"|format(subtotal) }}</h4>
+        <h5>Tax (8.25%): ${{ "%.2f"|format(tax) }}</h5>
+        {% if discount > 0 %}
+        <h5>Discount: -${{ "%.2f"|format(discount) }}</h5>
+        {% endif %}
+        <h3>Total: ${{ "%.2f"|format(total) }}</h3>
+
+        <form action="{{ url_for('cart.place_order') }}" method="POST">
+            <button type="submit">Place Order</button>
+        </form>
+        <!-- <form action="{{ url_for('cart.place_order') }}" method="POST">
+            <div class="form-group">
+                <label for="discount_code">Discount Code</label>
+                <input type="text" class="form-control" id="discount_code" name="discount_code" value="{{ code }}">
+                <button type="submit" class="btn btn-primary mt-2">Place Order</button>
+            </div>
+        </form> -->
+        
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
