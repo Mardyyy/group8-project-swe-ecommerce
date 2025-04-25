@@ -24,5 +24,6 @@ def index():
     elif sort_by == 'availability':
         query = query.order_by(Product.quantity.desc())
 
-    products = Product.query.all()
-    return render_template('index.html', products=products)
+    products = query.all()
+    
+    return render_template('index.html', products=products, search=search, sort_by=sort_by)
