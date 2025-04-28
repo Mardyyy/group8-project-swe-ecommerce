@@ -58,9 +58,11 @@ def add_product():
         db.session.commit()
 
         flash('Product added successfully!', 'success')
-        return redirect(url_for('admin.manage_products'))  # Redirect to manage products page
-
-    return render_template('admin/add_product.html', form=form)
+        return redirect(url_for('products.index'))  # Redirect to manage products page
+    
+    # Fetch all products to display
+    products = Product.query.all()
+    return render_template('admin/add_product.html', form=form, products=products)
 
 @bp.route('/edit_product/<int:id>', methods=['GET', 'POST'])
 @login_required

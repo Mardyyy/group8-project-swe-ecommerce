@@ -29,13 +29,40 @@
 
     <div class="form-group">
       <label for="image_url">Image URL</label>
-      {{ form.image_url(class="form-control") }}
+      {{ form.image_url(class="form-control", id="image_url_input") }}
     </div>
+
+    <!-- Image preview section -->
+    <div class="mb-3">
+      <label>Image Preview:</label><br>
+      <img id="image_preview" src="" alt="Image Preview" style="max-width: 200px; display: none;">
+  </div>
 
     <div class="form-group">
       <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
     </div>
   </form>
+
+  <!-- JavaScript to update preview and handle errors -->
+<script>
+  const imageInput = document.getElementById('image_url_input');
+  const previewImage = document.getElementById('image_preview');
+  
+  imageInput.addEventListener('input', function() {
+      const url = this.value;
+      if (url) {
+          previewImage.src = url;
+          previewImage.style.display = 'block';
+      } else {
+          previewImage.style.display = 'none';
+      }
+  });
+  
+  // If image fails to load, hide the preview
+  previewImage.onerror = function() {
+      this.style.display = 'none';
+  };
+  </script>
 
   <br>
 
@@ -48,4 +75,44 @@
       </ul>
     {% endif %}
   {% endwith %}
+  
+<hr>
+
+<h2>Current Products</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Image</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>${{ "%.2f"|format(product.price) }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>
+        {% if product.image_url %}
+          <img src="{{ product.image_url }}" alt="Product Image" style="max-width: 80px;">
+        {% else %}
+          No image
+        {% endif %}
+      </td>
+      <td>
+        <a href="{{ url_for('admin.edit_product', id=product.id) }}" class="btn btn-sm btn-warning">Edit</a>
+
+        <form method="POST" action="{{ url_for('admin.delete_product', id=product.id) }}" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this product?');">
+          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
