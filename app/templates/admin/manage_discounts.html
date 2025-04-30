@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+  <div class="container mt-4">
   <h2>Manage Discounts</h2>
   <a href="{{ url_for('admin.add_discount') }}" class="btn btn-primary mb-3">Add New Discount</a>
 
@@ -35,4 +36,5 @@
   {% else %}
     <p>No discounts available.</p>
   {% endif %}
+</div>
 {% endblock %}

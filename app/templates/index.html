@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
+<br />
 <form method="get" class="mb-4">
-    <div class="row g-2">
-        <div class="col-md-4">
+    <div class="row g-2 justify-content-center">
+        <div class="col-md-4 ">
             <input type="text" name="search" class="form-control" placeholder="Search products..." value="{{ search }}">
         </div>
         <div class="col-md-3">
             <select name="sort" class="form-select">
-                <option value="">Sort By</option>
+                <option value="">Sort By...</option>
                 <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
                 <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
                 <option value="availability" {% if sort_by == 'availability' %}selected{% endif %}>Availability</option>
@@ -37,8 +38,15 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text"><strong>${{ "%.2f"|format(product.price) }}</strong></p>
+                    {% if product.quantity <= 3 and product.quantity > 0 %}
+                    <p class="card-text text-danger"><strong>Low Stock!</strong></p>
+                    {% endif %}
+                    {% if product.quantity > 0 %}
                     <p class="card-text">In stock: {{ product.quantity }}</p>
                     <a href="{{ url_for('cart.add_to_cart', product_id=product.id) }}" class="btn btn-primary">Add to Cart</a>
+                    {% else %}
+                    <p class="card-text text-danger"><strong>Out of Stock!</strong></p>
+                    {% endif %}
                 </div>
             </div>
         </div>

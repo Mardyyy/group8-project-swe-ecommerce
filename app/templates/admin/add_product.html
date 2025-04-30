@@ -2,6 +2,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<div class="container mt-4">
   <h1>Add a New Product</h1>
   
   <form method="POST">
@@ -36,7 +37,7 @@
     <div class="mb-3">
       <label>Image Preview:</label><br>
       <img id="image_preview" src="" alt="Image Preview" style="max-width: 200px; display: none;">
-  </div>
+    </div>
 
     <div class="form-group">
       <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
@@ -65,16 +66,6 @@
   </script>
 
   <br>
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flashes">
-        {% for category, message in messages %}
-          <li class="flash {{ category }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
   
 <hr>
 
@@ -114,5 +105,5 @@
     {% endfor %}
   </tbody>
 </table>
-
+</div>
 {% endblock %}

@@ -30,5 +30,21 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <h3>Admin Product Log</h3>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="flash {{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+        {% else %}
+      <ul class="flashes">
+        <li class="flash">No log to show in this instance.</li>
+      </ul>
+    {% endif %}
+  {% endwith %}
+
 </div>
 {% endblock %}
